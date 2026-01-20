@@ -84,11 +84,12 @@
                             <h4 class="text-subsection-title">2. 미디어그룹별 효과 분석</h4>
                             <ol class="text-subsection-content media-group-list">
                                 <!-- 미디어그룹 리스트는 서버에서 반복문으로 동적 생성 -->
-                                <!-- 정렬 규칙: 유동 대비 노출 비율순으로 정렬 (내림차순), 동일한 비율일 경우 ㄱㄴㄷ, a-z 순으로 정렬 -->
+                                <!-- 정렬 규칙: 유동 대비 노출순으로 정렬 (내림차순), 동일한 비율일 경우 ㄱㄴㄷ, a-z 순으로 정렬 -->
+                                <!-- 각 미디어그룹에 알파벳 번호 부여 (a., b., c., ...) -->
                                 <!-- 
                                     예시 정렬 로직 (JavaScript):
                                     미디어그룹리스트.sort((a, b) => {
-                                        // 1순위: 유동 대비 노출 비율 (내림차순)
+                                        // 1순위: 유동 대비 노출 (내림차순)
                                         const ratioA = (a.ots / a.circulation) * 100;
                                         const ratioB = (b.ots / b.circulation) * 100;
                                         if (ratioB !== ratioA) {
@@ -100,11 +101,25 @@
                                     
                                     예시 정렬 로직 (Python):
                                     sorted(미디어그룹리스트, key=lambda x: (-(x.ots / x.circulation * 100), x.이름))
+                                    
+                                    알파벳 번호 부여 예시 (JavaScript):
+                                    const 알파벳 = 'abcdefghijklmnopqrstuvwxyz'.split('');
+                                    미디어그룹리스트.forEach((item, index) => {
+                                        item.알파벳번호 = 알파벳[index] + '.';
+                                    });
+                                    
+                                    알파벳 번호 부여 예시 (Python):
+                                    알파벳 = list('abcdefghijklmnopqrstuvwxyz')
+                                    for i, item in enumerate(미디어그룹리스트):
+                                        item['알파벳번호'] = 알파벳[i] + '.'
                                 -->
-                                <!-- Handlebars: {{#each (sortByRatio 미디어그룹리스트)}}<li>{{this.이름}}</li>{{/each}} -->
-                                <!-- Jinja2: {% for item in 미디어그룹리스트|sort(attribute='노출비율', reverse=True)|sort(attribute='이름') %}<li>{{item.이름}}</li>{% endfor %} -->
+                                <!-- Handlebars: {{#each (sortByRatio 미디어그룹리스트)}}<li>{{this.알파벳번호}} {{this.이름}}</li>{{/each}} -->
+                                <!-- Jinja2: {% for item in 미디어그룹리스트|sort(attribute='노출비율', reverse=True)|sort(attribute='이름') %}<li>{{item.알파벳번호}} {{item.이름}}</li>{% endfor %} -->
                                 <!-- 현재는 임시로 하나의 항목으로 표시 (서버에서 동적 생성 필요) -->
-                                <li>{{미디어그룹리스트}}</li>
+                                <!-- 각 미디어그룹마다 하나의 알파벳 번호만 부여 -->
+                                <!-- 서버에서 미디어그룹 수만큼 동적으로 생성 -->
+                                <!-- 예시: {{#each 미디어그룹리스트}}<li>{{this.알파벳번호}}. {{this.이름}}</li>{{/each}} -->
+                                <li>{{미디어그룹명_1}}</li>
                             </ol>
                         </div>
                     </div>
@@ -153,15 +168,15 @@
                     <div class="frame-top-title-group">
                         <span class="text-스케줄명-media">{{스케줄명}}</span>
                         <span class="text-separator-media">|</span>
-                        <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
+                        <span class="text-목차-media">미디어그룹 상품 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 -->
                 <div class="frame-sub-title">
-                    <h1 class="text-media-title">미디어그룹 정보</h1>
-                    <p class="text-media-subtitle">미디어그룹 및 광고 기간에 대한 정보</p>
+                    <h1 class="text-media-title">미디어그룹 상품 정보</h1>
+                    <p class="text-media-subtitle">미디어그룹 상품 및 광고 기간에 대한 정보</p>
                 </div>
             </div>
 
@@ -193,35 +208,76 @@
                             </td>
                         </tr>
 
-                        <!-- 두 번째 행 (동적 항목 반복 가능) -->
+                        <!-- 두 번째 행: 광고 기간 및 보고서 발행일 -->
+                        <tr class="table-row-middle">
+                            <td class="field field-label">
+                                <span class="field-text">광고 기간</span>
+                            </td>
+                            <td class="field field-value field-bg-light">
+                                <div class="field-date-range">
+                                    <span class="field-text">{{광고시작일}}</span>
+                                    <span class="field-text">~</span>
+                                    <span class="field-text">{{광고종료일}}</span>
+                                    <span class="field-text">(총 {{운영일수}}일)</span>
+                                </div>
+                            </td>
+                            <td class="field field-label">
+                                <span class="field-text">보고서 발행일</span>
+                            </td>
+                            <td class="field field-value field-bg-light">
+                                <span class="field-text">{{보고서발행일}}</span>
+                            </td>
+                        </tr>
+
+                        <!-- 세 번째 행: 미디어그룹 상품 및 미디어 정보 (큰 행) -->
                         <!-- 서버에서 미디어그룹과 미디어 정보를 반복문으로 생성 -->
                         <!-- 예시: {{#each 미디어그룹리스트}} 또는 {% for item in 미디어그룹리스트 %} -->
-                        <tr class="table-row-middle">
+                        <tr class="table-row-last">
                             <td class="field field-label field-tall">
-                                <span class="field-text">미디어그룹</span>
+                                <div class="field-label-content field-label-media-product">
+                                    <span class="field-text">미디어그룹 상품</span>
+                                    <span class="field-text-small">(총 {{미디어그룹개수}}개 미디어그룹)</span>
+                                </div>
                             </td>
                             <!-- Frame 16: 미디어그룹 값 그룹 -->
                             <td class="field field-value field-tall">
                                 <!-- 동적 항목: 서버에서 반복문으로 생성 -->
+                                <!-- 중요: 8개까지 첫 페이지에 표시, 9개 이상부터는 다음 페이지에 이어서 표시됨 -->
+                                <!-- CSS에서 max-height: 320px (8개 * 40px)로 제한되어 있음 -->
                                 <!-- 예시: {{#each 미디어그룹리스트}} -->
-                                <!--   <div class="field-value-item">{{this}}</div> -->
+                                <!--   <div class="field-value-item">{{this.이름}}</div> -->
                                 <!-- {{/each}} -->
+                                <!-- Jinja2의 경우: -->
+                                <!--   {% for item in 미디어그룹리스트 %} -->
+                                <!--     <div class="field-value-item">{{item.이름}}</div> -->
+                                <!--   {% endfor %} -->
+                                <!-- 첫 페이지: 1-8행만 표시 -->
+                                <!-- 서버 측에서 미디어그룹 수만큼 반복 생성, 처음 8개만 이 페이지에 렌더링 -->
+                                <!-- Handlebars 예시: {{#each 미디어그룹리스트}} {{#if (lte @index 7)}} ... {{/if}} {{/each}} -->
+                                <!-- Jinja2 예시: {% for item in 미디어그룹리스트[:8] %} ... {% endfor %} -->
                                 <div class="field-value-item">{{미디어그룹_1}}</div>
                                 <div class="field-value-item">{{미디어그룹_2}}</div>
                                 <div class="field-value-item">{{미디어그룹_3}}</div>
+                                <div class="field-value-item">{{미디어그룹_4}}</div>
+                                <div class="field-value-item">{{미디어그룹_5}}</div>
+                                <div class="field-value-item">{{미디어그룹_6}}</div>
+                                <div class="field-value-item">{{미디어그룹_7}}</div>
+                                <div class="field-value-item">{{미디어그룹_8}}</div>
                             </td>
                             <td class="field field-label field-tall">
-                                <div class="field-label-content">
+                                <div class="field-label-content field-label-media-info">
                                     <span class="field-text">미디어 정보</span>
-                                    <span class="field-text-small">(유형 / 사이즈 / *간격/ 대수)</span>
+                                    <span class="field-text-small">(유형 / 사이즈 / 대수)</span>
                                 </div>
                             </td>
                             <!-- Frame 17: 미디어 정보 값 그룹 -->
                             <td class="field field-value field-tall">
                                 <!-- 동적 항목: 서버에서 반복문으로 생성 -->
+                                <!-- 중요: 8개까지 첫 페이지에 표시, 9개 이상부터는 다음 페이지에 이어서 표시됨 -->
+                                <!-- CSS에서 max-height: 320px (8개 * 40px)로 제한되어 있음 -->
                                 <!-- 미디어 정보 구조: -->
                                 <!-- 1. LCD: LCD/ n "/ N대 (n은 사이즈 인치, N은 동일한 사이즈의 LCD 대 수) -->
-                                <!--    예시: LCD/ 55 "/ 10대 -->
+                                <!--    예시: LCD/ 49 "/ 2대 -->
                                 <!-- 2. LED: LED/ 세로 x 가로 mm/ 간격 mm/ N대 (N은 동일한 세로 x 가로, 간격의 LED 대 수) -->
                                 <!--    예시: LED/ 1920 x 1080 mm/ 50 mm/ 5대 -->
                                 <!-- 3. 기타: 기타/ 세로 x 가로 mm/ N대 (N은 동일한 세로 x 가로의 기타 디스플레이 대 수) -->
@@ -240,29 +296,26 @@
                                       </div>
                                     {{/each}}
                                 -->
+                                <!-- 첫 페이지: 1-8행만 표시 -->
+                                <!-- 서버 측에서 미디어정보 수만큼 반복 생성, 처음 8개만 이 페이지에 렌더링 -->
+                                <!-- Handlebars 예시: {{#each 미디어정보리스트}} {{#if (lte @index 7)}} ... {{/if}} {{/each}} -->
+                                <!-- Jinja2 예시: {% for item in 미디어정보리스트[:8] %} ... {% endfor %} -->
                                 <div class="field-value-item">{{미디어정보_1}}</div>
                                 <div class="field-value-item">{{미디어정보_2}}</div>
                                 <div class="field-value-item">{{미디어정보_3}}</div>
+                                <div class="field-value-item">{{미디어정보_4}}</div>
+                                <div class="field-value-item">{{미디어정보_5}}</div>
+                                <div class="field-value-item">{{미디어정보_6}}</div>
+                                <div class="field-value-item">{{미디어정보_7}}</div>
+                                <div class="field-value-item">{{미디어정보_8}}</div>
                             </td>
                         </tr>
 
-                        <!-- 세 번째 행 -->
-                        <tr class="table-row-last">
-                            <td class="field field-label">
-                                <span class="field-text">광고 기간</span>
-                            </td>
-                            <td class="field field-value field-bg-light" colspan="1">
-                                <span class="field-text">{{광고시작일}} ~ {{광고종료일}} (총 {{운영일수}}일)</span>
-                            </td>
-                            <td class="field field-label">
-                                <span class="field-text">보고서 발행일</span>
-                            </td>
-                            <td class="field field-value field-bg-light" colspan="1">
-                                <span class="field-text">{{보고서발행일}}</span>
-                            </td>
-                        </tr>
                         </table>
                     </div>
+
+                    <!-- 다음 페이지에 이어서 텍스트 -->
+                    <div class="text-continued-next-page">다음 페이지에 이어서</div>
 
                     <!-- pitch 안내 문구: 주석 -->
                     <p class="text-pitch-note">※ 간격은 LED 미디어에 한해 기입됩니다.</p>
@@ -274,8 +327,108 @@
         </div>
     </section>
 
+    <!-- 페이지 4-1: 미디어그룹 상품 정보 (이어짐) -->
+    <section class="page page-media-info page-performance-2 page-media-info-continued" id="page-media-info-continued">
+        <div class="container container-media-info">
+            <!-- head: 헤더 영역 (Frame 10) -->
+            <div class="frame-head">
+                <!-- top title: 상단 Breadcrumb -->
+                <div class="frame-top-title">
+                    <!-- top title: Breadcrumb 그룹 -->
+                    <div class="frame-top-title-group">
+                        <span class="text-스케줄명-media">{{스케줄명}}</span>
+                        <span class="text-separator-media">|</span>
+                        <span class="text-목차-media">미디어그룹 상품 및 주요 광고 성과</span>
+                    </div>
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
+                </div>
+                <!-- sub title: 타이틀 영역 -->
+                <div class="frame-sub-title">
+                    <h1 class="text-media-title">미디어그룹 상품 정보</h1>
+                    <p class="text-media-subtitle">미디어그룹 상품 및 광고 기간에 대한 정보</p>
+                </div>
+            </div>
+
+            <!-- 콘텐츠 래퍼 -->
+            <div class="content-wrapper">
+                <!-- 내용: 본문 영역 (Frame 내용) -->
+                <div class="frame-내용">
+                    <!-- content title: 광고 정보 헤더 -->
+                    <div class="frame-content-title">
+                        <h2 class="text-ad-info-title">광고 정보</h2>
+                    </div>
+
+                    <!-- table: 테이블 영역 (Frame table) -->
+                    <div class="table-frame frame-table-container">
+                        <table class="frame-table">
+                        <!-- 첫 번째 행 -->
+                        <tr class="table-row-first">
+                            <td class="field field-label">
+                                <span class="field-text">광고주</span>
+                            </td>
+                            <td class="field field-value" colspan="1">
+                                <span class="field-text">{{광고주명}}</span>
+                            </td>
+                            <td class="field field-label">
+                                <span class="field-text">광고 계약명</span>
+                            </td>
+                            <td class="field field-value" colspan="1">
+                                <span class="field-text">{{스케줄명}}</span>
+                            </td>
+                        </tr>
+
+                        <!-- 세 번째 행: 미디어그룹 상품 및 미디어 정보 (이어짐) -->
+                        <tr class="table-row-last">
+                            <td class="field field-label field-tall">
+                                <div class="field-label-content field-label-media-product">
+                                    <span class="field-text">미디어그룹 상품</span>
+                                    <span class="field-text-small">(총 {{미디어그룹개수}}개 미디어그룹)</span>
+                                </div>
+                            </td>
+                            <!-- Frame 16: 미디어그룹 값 그룹 -->
+                            <td class="field field-value field-tall">
+                                <!-- 다음 페이지: 9-12행만 표시 -->
+                                <!-- 서버 측에서 미디어그룹 수만큼 반복 생성, 9번째부터만 이 페이지에 렌더링 -->
+                                <!-- Handlebars 예시: {{#each 미디어그룹리스트}} {{#if (gt @index 7)}} ... {{/if}} {{/each}} -->
+                                <!-- Jinja2 예시: {% for item in 미디어그룹리스트[8:] %} ... {% endfor %} -->
+                                <!-- 주의: 미디어그룹이 8개 이하일 경우 이 섹션 전체를 렌더링하지 않도록 서버 측에서 처리 필요 -->
+                                <div class="field-value-item">{{미디어그룹_9}}</div>
+                                <div class="field-value-item">{{미디어그룹_10}}</div>
+                                <div class="field-value-item">{{미디어그룹_11}}</div>
+                                <div class="field-value-item">{{미디어그룹_12}}</div>
+                            </td>
+                            <td class="field field-label field-tall">
+                                <div class="field-label-content field-label-media-info">
+                                    <span class="field-text">미디어 정보</span>
+                                    <span class="field-text-small">(유형 / 사이즈 / 대수)</span>
+                                </div>
+                            </td>
+                            <!-- Frame 17: 미디어 정보 값 그룹 -->
+                            <td class="field field-value field-tall">
+                                <!-- 다음 페이지: 9-12행만 표시 -->
+                                <!-- 서버 측에서 미디어정보 수만큼 반복 생성, 9번째부터만 이 페이지에 렌더링 -->
+                                <!-- Handlebars 예시: {{#each 미디어정보리스트}} {{#if (gt @index 7)}} ... {{/if}} {{/each}} -->
+                                <!-- Jinja2 예시: {% for item in 미디어정보리스트[8:] %} ... {% endfor %} -->
+                                <!-- 주의: 미디어정보가 8개 이하일 경우 이 섹션 전체를 렌더링하지 않도록 서버 측에서 처리 필요 -->
+                                <div class="field-value-item">{{미디어정보_9}}</div>
+                                <div class="field-value-item">{{미디어정보_10}}</div>
+                                <div class="field-value-item">{{미디어정보_11}}</div>
+                                <div class="field-value-item">{{미디어정보_12}}</div>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 페이지 번호 -->
+            <div class="page-number"></div>
+        </div>
+    </section>
+
     <!-- 페이지 5: 주요 광고 성과 - Ⅰ -->
-    <section class="page page-media-info">
+    <section class="page page-media-info page-performance-5">
         <div class="container container-media-info">
             <!-- head: 헤더 영역 -->
             <div class="frame-head">
@@ -287,7 +440,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 -->
@@ -336,7 +489,7 @@
                         <img src="insight icon.svg" alt="인사이트 아이콘" class="insight-icon">
                         <!-- Frame 1686563118: 인사이트 텍스트 컨테이너 -->
                         <div class="frame-insight-text-container">
-                                <span>유동 대비 노출 비율은 </span>
+                                <span>유동 대비 노출은 </span>
                                 <!-- Frame 1686563120: 비율 텍스트 -->
                                 <span class="frame-insight-ratio-text">
                                     <span class="insight-value">{{노출비율}}%</span>
@@ -456,7 +609,7 @@
     </section>
 
     <!-- 페이지 6: 주요 광고 성과 - Ⅱ -->
-    <section class="page page-media-info">
+    <section class="page page-media-info page-performance-6">
         <div class="container container-media-info">
             <!-- head: 헤더 영역 (Frame 10) -->
             <div class="frame-head">
@@ -468,7 +621,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
@@ -500,7 +653,7 @@
     </section>
 
     <!-- 페이지 7: 주요 광고 성과 - Ⅲ -->
-    <section class="page page-media-info page-performance-3">
+    <section class="page page-media-info page-performance-3 page-performance-7">
         <div class="container container-media-info">
             <!-- head: 헤더 영역 (Frame 10) -->
             <div class="frame-head">
@@ -512,7 +665,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
@@ -534,7 +687,7 @@
                         </div>
                     </div>
 
-                    <!-- Frame 28: 테이블 -->
+                    <!-- Frame 28: 테이블 (첫 페이지: 1-8행) -->
                     <div class="table-frame frame-table-performance3-container">
                         <table class="frame-table-performance3">
                         <!-- 테이블 헤더 -->
@@ -544,57 +697,206 @@
                                 <th class="field field-label">유동인구</th>
                                 <th class="field field-label">노출인구</th>
                                 <th class="field field-label">유동인구 대비 노출인구 비율</th>
-                                <th class="field field-label">CPM (노출인구 기준)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- 일반 미디어그룹 행들 (서버에서 반복문으로 동적 생성) -->
                             <!-- 미디어그룹 수만큼 행이 동적으로 생성됩니다 -->
+                            <!-- 첫 페이지: 1-8행만 표시 -->
                             <!-- 예시: {{#each 미디어그룹리스트}} 또는 {% for item in 미디어그룹리스트 %} -->
                             <!-- 
                                 서버 측 렌더링 예시 (Handlebars):
                                 {{#each 미디어그룹리스트}}
+                                {{#if (lte @index 7)}}
                                 <tr class="table-data-row">
                                     <td class="field field-value">{{this.이름}}</td>
                                     <td class="field field-value">{{this.circulation}}명</td>
                                     <td class="field field-value">{{this.ots}}명</td>
-                                    <td class="field field-value">{{this.circulation대비ots비율}}%</td>
-                                    <td class="field field-value field-value-currency">{{this.CPM}}원</td>
+                                    <td class="field field-value">{{this.유동 대비 노출}}%</td>
                                 </tr>
+                                {{/if}}
                                 {{/each}}
                                 
                                 서버 측 렌더링 예시 (Jinja2):
-                                {% for item in 미디어그룹리스트 %}
+                                {% for item in 미디어그룹리스트[:8] %}
                                 <tr class="table-data-row">
                                     <td class="field field-value">{{item.이름}}</td>
                                     <td class="field field-value">{{item.circulation}}명</td>
                                     <td class="field field-value">{{item.ots}}명</td>
-                                    <td class="field field-value">{{item.circulation대비ots비율}}%</td>
-                                    <td class="field field-value field-value-currency">{{item.CPM}}원</td>
+                                    <td class="field field-value">{{item.유동 대비 노출}}%</td>
                                 </tr>
                                 {% endfor %}
                             -->
-                            <!-- 서버에서 미디어그룹 수만큼 반복 생성 -->
-                            <!-- Handlebars 예시: {{#each 미디어그룹리스트}} -->
-                            <!-- Jinja2 예시: {% for item in 미디어그룹리스트 %} -->
-                            <!-- 현재는 임시로 하나의 행으로 표시 (서버에서 동적 생성 필요) -->
-                            <!-- 서버 측에서 아래 행을 미디어그룹 수만큼 반복 생성해야 합니다 -->
+                            <!-- 첫 페이지: 1-8행 -->
                             <tr class="table-data-row">
-                                <td class="field field-value">{{미디어그룹명}}</td>
-                                <td class="field field-value">{{circulation}}명</td>
-                                <td class="field field-value">{{ots}}명</td>
-                                <td class="field field-value">{{circulation대비ots비율}}%</td>
-                                <td class="field field-value field-value-currency">{{CPM}}원</td>
+                                <td class="field field-value">{{미디어그룹명_1}}</td>
+                                <td class="field field-value">{{circulation_1}}명</td>
+                                <td class="field field-value">{{ots_1}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_1}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_2}}</td>
+                                <td class="field field-value">{{circulation_2}}명</td>
+                                <td class="field field-value">{{ots_2}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_2}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_3}}</td>
+                                <td class="field field-value">{{circulation_3}}명</td>
+                                <td class="field field-value">{{ots_3}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_3}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_4}}</td>
+                                <td class="field field-value">{{circulation_4}}명</td>
+                                <td class="field field-value">{{ots_4}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_4}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_5}}</td>
+                                <td class="field field-value">{{circulation_5}}명</td>
+                                <td class="field field-value">{{ots_5}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_5}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_6}}</td>
+                                <td class="field field-value">{{circulation_6}}명</td>
+                                <td class="field field-value">{{ots_6}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_6}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_7}}</td>
+                                <td class="field field-value">{{circulation_7}}명</td>
+                                <td class="field field-value">{{ots_7}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_7}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_8}}</td>
+                                <td class="field field-value">{{circulation_8}}명</td>
+                                <td class="field field-value">{{ots_8}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_8}}%</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 주석 문구: 동일한 장소의 미디어그룹 안내 -->
+                    <p class="text-performance-table-note">*동일한 장소의 미디어그룹은 동일한 유동·노출 인구 지표를 기준으로 광고 효과가 산정됩니다.</p>
+
+                    <!-- 다음 페이지에 이어서 텍스트 -->
+                    <div class="text-continued-next-page text-continued-performance-table">다음 페이지에 이어서</div>
+
+            </div>
+        </div>
+
+        <!-- 페이지 번호 -->
+        <div class="page-number"></div>
+    </section>
+
+    <!-- 페이지 7-2: 주요 광고 성과 - Ⅲ (이어서: 9-12행) -->
+    <section class="page page-media-info page-performance-3 page-performance-3-continued">
+        <div class="container container-media-info">
+            <!-- head: 헤더 영역 (Frame 10) -->
+            <div class="frame-head">
+                <!-- top title: 상단 Breadcrumb -->
+                <div class="frame-top-title">
+                    <!-- top title: Breadcrumb 그룹 -->
+                    <div class="frame-top-title-group">
+                        <span class="text-스케줄명-media">{{스케줄명}}</span>
+                        <span class="text-separator-media">|</span>
+                        <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
+                    </div>
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
+                </div>
+                <!-- sub title: 타이틀 영역 (Frame 9) -->
+                <div class="frame-sub-title">
+                    <h1 class="text-media-title">주요 광고 성과 - Ⅲ</h1>
+                </div>
+            </div>
+
+            <!-- 성과 테이블 섹션 -->
+            <div class="performance-table-section">
+                <!-- 성과 테이블 래퍼 -->
+                <div class="performance-table-wrapper">
+                    <!-- Frame 21: content title -->
+                    <div class="frame-content-title">
+                        <h2 class="text-ad-info-title">미디어그룹별 광고 성과</h2>
+                        <!-- 데이터 분석 정보 -->
+                        <div class="frame-data-info">
+                            <span class="data-info-text">수집 기간: {{광고시작일}} ~ {{광고종료일}} | 산출 기준: 유동인구・노출인구 총합</span>
+                        </div>
+                    </div>
+
+                    <!-- Frame 28: 테이블 (다음 페이지: 9-12행) -->
+                    <div class="table-frame frame-table-performance3-container">
+                        <table class="frame-table-performance3">
+                        <!-- 테이블 헤더 -->
+                        <thead>
+                            <tr class="table-header-row">
+                                <th class="field field-label">미디어그룹명</th>
+                                <th class="field field-label">유동인구</th>
+                                <th class="field field-label">노출인구</th>
+                                <th class="field field-label">유동인구 대비 노출인구 비율</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 다음 페이지: 9-12행 -->
+                            <!-- 서버 측 렌더링 예시 (Handlebars):
+                                {{#each 미디어그룹리스트}}
+                                {{#if (gt @index 7)}}
+                                <tr class="table-data-row">
+                                    <td class="field field-value">{{this.이름}}</td>
+                                    <td class="field field-value">{{this.circulation}}명</td>
+                                    <td class="field field-value">{{this.ots}}명</td>
+                                    <td class="field field-value">{{this.유동 대비 노출}}%</td>
+                                </tr>
+                                {{/if}}
+                                {{/each}}
+                                
+                                서버 측 렌더링 예시 (Jinja2):
+                                {% for item in 미디어그룹리스트[8:] %}
+                                <tr class="table-data-row">
+                                    <td class="field field-value">{{item.이름}}</td>
+                                    <td class="field field-value">{{item.circulation}}명</td>
+                                    <td class="field field-value">{{item.ots}}명</td>
+                                    <td class="field field-value">{{item.유동 대비 노출}}%</td>
+                                </tr>
+                                {% endfor %}
+                            -->
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_9}}</td>
+                                <td class="field field-value">{{circulation_9}}명</td>
+                                <td class="field field-value">{{ots_9}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_9}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_10}}</td>
+                                <td class="field field-value">{{circulation_10}}명</td>
+                                <td class="field field-value">{{ots_10}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_10}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_11}}</td>
+                                <td class="field field-value">{{circulation_11}}명</td>
+                                <td class="field field-value">{{ots_11}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_11}}%</td>
+                            </tr>
+                            <tr class="table-data-row">
+                                <td class="field field-value">{{미디어그룹명_12}}</td>
+                                <td class="field field-value">{{circulation_12}}명</td>
+                                <td class="field field-value">{{ots_12}}명</td>
+                                <td class="field field-value">{{유동 대비 노출_12}}%</td>
                             </tr>
                         </tbody>
                         </table>
                     </div>
 
             </div>
-
-            <!-- 페이지 번호 -->
-            <div class="page-number"></div>
         </div>
+
+        <!-- 페이지 번호 -->
+        <div class="page-number"></div>
     </section>
 
             <!-- 페이지 8: 주요 광고 성과 - Ⅳ (인구 피라미드) -->
@@ -610,7 +912,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
@@ -655,7 +957,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
@@ -700,7 +1002,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
@@ -753,7 +1055,7 @@
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹 및 주요 광고 성과</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
@@ -796,23 +1098,57 @@
         </div>
     </section>
 
-    <!-- 페이지 12: 간지 2 (미디어그룹별 효과 분석) -->
-    <section class="page page-divider">
+    <!-- 페이지 12: 간지 2 (섹션2 표지) -->
+    <section class="page page-divider page-divider-2">
         <div class="container container-divider">
             <div class="divider-content">
-                <h1 class="divider-title">2. 미디어그룹별 효과 분석</h1>
-                <!-- 분석 미디어그룹 목록 컨테이너 -->
+                <h1 class="divider-title divider-title-section2">미디어그룹별 효과 분석</h1>
                 <div class="divider-media-group-container">
-                    <!-- 분석 미디어그룹 목록 제목 -->
-                    <div class="divider-media-group-title-frame">
-                        <span class="divider-media-group-title">분석 미디어그룹 목록</span>
-                    </div>
-                    <!-- 미디어그룹 목록 -->
-                    <div class="divider-media-group-list" id="divider-media-group-list">
-                        <!-- 서버에서 제공하는 미디어그룹 키(a, b, c 등)에 따라 목록이 생성됩니다 -->
-                        <div class="divider-media-group-item" data-media-group-key="a">a. {{미디어그룹명_a}}</div>
-                        <div class="divider-media-group-item" data-media-group-key="b">b. {{미디어그룹명_b}}</div>
-                        <div class="divider-media-group-item" data-media-group-key="c">c. {{미디어그룹명_c}}</div>
+                    <!-- Frame 1686563104: 분석 미디어그룹 목록 컨테이너 -->
+                    <div class="divider-media-group-content">
+                        <!-- Frame 21: 분석 미디어그룹 목록 제목 -->
+                        <div class="divider-media-group-title-frame">
+                            <h2 class="divider-media-group-title">분석 미디어그룹 목록</h2>
+                        </div>
+                        <!-- Frame 1686563105: 미디어그룹 목록 -->
+                        <div class="divider-media-group-list">
+                            <!-- 서버에서 동적으로 생성 (정렬 규칙: 유동 대비 노출순으로 정렬, 동일한 비율일 경우 ㄱㄴㄷ, a-z 순으로 정렬) -->
+                            <!-- 각 미디어그룹에 알파벳 번호 부여 (a., b., c., ...) -->
+                            <!-- 
+                                예시 정렬 로직 (JavaScript):
+                                미디어그룹리스트.sort((a, b) => {
+                                    // 1순위: 유동 대비 노출 (내림차순)
+                                    const ratioA = (a.ots / a.circulation) * 100;
+                                    const ratioB = (b.ots / b.circulation) * 100;
+                                    if (ratioB !== ratioA) {
+                                        return ratioB - ratioA; // 내림차순
+                                    }
+                                    // 2순위: 동일 비율일 경우 이름순 (ㄱㄴㄷ, a-z)
+                                    return a.이름.localeCompare(b.이름, 'ko');
+                                });
+                                // 알파벳 번호 부여 (a., b., c., ...)
+                                미디어그룹리스트.forEach((item, index) => {
+                                    item.알파벳번호 = String.fromCharCode(97 + index); // 97 = 'a'
+                                });
+                            -->
+                            <!-- 서버 측 렌더링 예시 (Handlebars): -->
+                            <!-- {{#each 미디어그룹리스트}} -->
+                            <!--     <div class="divider-media-group-item">{{알파벳번호}}. {{이름}}</div> -->
+                            <!-- {{/each}} -->
+                            <!-- 서버 측 렌더링 예시 (Jinja2): -->
+                            <!-- {% for item in 미디어그룹리스트 %} -->
+                            <!--     <div class="divider-media-group-item">{{item.알파벳번호}}. {{item.이름}}</div> -->
+                            <!-- {% endfor %} -->
+                            <div class="divider-media-group-item">a. {{미디어그룹명_1}}</div>
+                            <div class="divider-media-group-item">b. {{미디어그룹명_2}}</div>
+                            <div class="divider-media-group-item">c. {{미디어그룹명_3}}</div>
+                            <div class="divider-media-group-item">d. {{미디어그룹명_4}}</div>
+                            <div class="divider-media-group-item">e. {{미디어그룹명_5}}</div>
+                            <div class="divider-media-group-item">f. {{미디어그룹명_6}}</div>
+                            <div class="divider-media-group-item">g. {{미디어그룹명_7}}</div>
+                            <div class="divider-media-group-item">h. {{미디어그룹명_8}}</div>
+                            <div class="divider-media-group-item">i. {{미디어그룹명_9}}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="divider-logo">
@@ -824,169 +1160,118 @@
         </div>
     </section>
 
-    <!-- 페이지 13: 미디어그룹별 효과 분석 상세 -->
-    <section class="page page-media-info page-media-group-detail">
+    <!-- 페이지 13: 미디어그룹별 효과 분석 - Figma Frame 119 구조 -->
+    <section class="page page-media-info page-media-group-detail page-media-group-frame119">
         <div class="container container-media-info">
             <!-- head: 헤더 영역 (Frame 10) -->
             <div class="frame-head">
-                <!-- top title: 상단 Breadcrumb -->
+                <!-- top title: 상단 Breadcrumb (Frame 8) -->
                 <div class="frame-top-title">
-                    <!-- top title: Breadcrumb 그룹 -->
+                    <!-- Breadcrumb 그룹 (Frame 1686563114) -->
                     <div class="frame-top-title-group">
                         <span class="text-스케줄명-media">{{스케줄명}}</span>
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹별 효과 분석</span>
-                        <span class="text-separator-media">></span>
+                        <span class="text-separator-media">|</span>
                         <span class="text-미디어그룹명-media">{{미디어그룹명}}</span>
                     </div>
-                    <!-- adex: 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
                     <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
                 <!-- sub title: 타이틀 영역 (Frame 9) -->
                 <div class="frame-sub-title frame-sub-title-media-group">
-                    <h1 class="text-media-title text-media-group-title">{{미디어그룹명}}</h1>
-                    <!-- Frame 1686563118: 서브타이틀 -->
+                    <h1 class="text-media-group-title">{{미디어그룹명}}</h1>
+                    <!-- Frame 1686563118: 부제목 그룹 -->
                     <div class="frame-media-subtitle">
+                        <!-- Frame 1686563120: 첫 번째 그룹 -->
                         <div class="frame-subtitle-line-1">
                             <span class="text-media-group-subtitle">{{광고물유형}}</span>
-                            <span class="text-media-group-subtitle-separator">이며, </span>
+                            <span class="text-media-group-subtitle-separator">이며,</span>
                         </div>
+                        <!-- Frame 1686563119: 두 번째 그룹 -->
                         <div class="frame-subtitle-line-2">
-                            <span class="text-media-group-subtitle">{{장소적 특징}}</span>
+                            <!-- Frame 1686563121: 지역명 그룹 -->
+                            <div class="frame-subtitle-location">
+                                <span class="text-media-group-subtitle">{{장소적 특징}}</span>
+                                <span class="text-media-group-subtitle-region"> 지역</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Frame 1686563155: 콘텐츠 영역 -->
+            <!-- 콘텐츠 영역 (Frame 1686563194) -->
             <div class="media-detail-content">
-                <!-- 지도와 미디어그룹 광고 개요 컨테이너 -->
-                <div class="frame-media-map-overview-container">
-                    <!-- Frame 30: 지도 영역 -->
-                    <div class="frame-media-map-image">
-                        <div
-                            id="map-{{미디어그룹번호}}"
-                            class="media-group-map"
-                            data-lat="{{위도}}"
-                            data-lng="{{경도}}"
-                            aria-label="미디어그룹 지도">
-                        </div>
-                    </div>
-
-                    <!-- Frame 20: 미디어그룹 광고 개요 -->
-                    <div class="frame-media-overview">
-                <!-- Frame 21: 제목 + 광고 기간 정보 -->
-                <div class="frame-media-overview-header">
-                    <h2 class="text-media-group-overview-title">미디어그룹 광고 개요</h2>
-                    <!-- Frame 1686563134: 광고 기간 정보 -->
-                    <div class="data-period-wrapper">
-                        <span class="data-info-text">광고 기간: </span>
-                        <div class="data-period-range">
-                            <div class="data-period-range-inner">
-                                <div class="data-period-start">
-                                    <span class="data-info-text">{{광고시작일}}</span>
+                <!-- 미디어그룹 광고 개요 (Frame 1686563189) -->
+                <div class="frame-media-overview frame-media-overview-standalone">
+                    <!-- Frame 20: 제목 + 광고 기간 -->
+                    <div class="frame-media-overview-header">
+                        <h2 class="text-media-group-overview-title">미디어그룹 광고 개요</h2>
+                        <!-- Frame 1686563134: 광고 기간 정보 -->
+                        <div class="data-period-wrapper">
+                            <span class="data-info-text">광고 기간: </span>
+                            <div class="data-period-range">
+                                <div class="data-period-range-inner">
+                                    <!-- Frame 1686563116: 시작일 -->
+                                    <div class="data-period-start">
+                                        <span class="data-info-text">{{광고시작일}}</span>
+                                    </div>
+                                    <span class="data-info-text">~</span>
+                                    <span class="data-info-text">{{광고종료일}}</span>
                                 </div>
-                                <span class="data-info-text">~</span>
-                                <span class="data-info-text">{{광고종료일}}</span>
+                                <!-- Frame 1686563117: 총 일수 -->
+                                <div class="data-info-group">
+                                    <span class="data-info-text">(총 {{운영일수}}</span>
+                                    <span class="data-info-text">일)</span>
+                                </div>
                             </div>
-                            <div class="data-info-group">
-                                <span class="data-info-text">(총 {{운영일수}}</span>
-                                <span class="data-info-text">일)</span>
+                        </div>
+                    </div>
+
+                    <!-- Frame 13: 테이블 영역 -->
+                    <div class="frame-media-info-table">
+                        <!-- Frame 18: 미디어 위치 행 -->
+                        <div class="frame-media-info-row-1">
+                            <div class="field field-label field-media-group">
+                                <span class="field-text">미디어 위치</span>
+                            </div>
+                            <div class="field field-value field-media-group">
+                                <span class="field-text">{{미디어위치}}</span>
+                            </div>
+                        </div>
+
+                        <!-- Frame 1686563190: 미디어 대수 행 -->
+                        <div class="frame-media-info-row-2">
+                            <div class="field field-label field-media-group field-tall">
+                                <span class="field-text">미디어 대수</span>
+                            </div>
+                            <div class="field field-value field-media-group field-tall">
+                                <!-- Frame 1686563190: field 내부 그룹 -->
+                                <div class="field-value-inner-group">
+                                    <span class="field-text field-text-bold">총 {{미디어대수}}대</span>
+                                    <span class="field-text">{{미디어유형/사이즈/간격/대수}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Frame 1686563191: 운영 시간 행 -->
+                        <div class="frame-media-info-row-2">
+                            <div class="field field-label field-media-group field-tall">
+                                <span class="field-text">운영 시간</span>
+                            </div>
+                            <div class="field field-value field-media-group field-tall">
+                                <span class="field-text">{{운영시간}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Frame 13: 테이블 형태의 정보들 -->
-                <div class="frame-media-info-table">
-                    <!-- Frame 18: 첫 번째 행 (미디어 위치) -->
-                    <div class="frame-media-info-row-1">
-                        <div class="field field-label field-media-group">
-                            <span class="field-text">미디어 위치</span>
-                        </div>
-                        <div class="field field-value field-media-group">
-                            <span class="field-text">{{미디어위치}}</span>
-                        </div>
-                    </div>
-
-                    <!-- Frame 20: 두 번째 행 (미디어 대수) -->
-                    <div class="frame-media-info-row-2">
-                        <div class="field field-label field-media-group field-tall">
-                            <span class="field-text">미디어 대수</span>
-                        </div>
-                        <div class="field field-value field-media-group field-tall">
-                            <span class="field-text field-text-bold">총 {{미디어대수}}대</span>
-                            <span class="field-text">{{미디어유형/사이즈/간격/대수}}</span>
-                        </div>
-                    </div>
-
-                    <!-- Frame 1686563156: 세 번째 행 (운영 시간) -->
-                    <div class="frame-media-info-row-2">
-                        <div class="field field-label field-media-group field-tall">
-                            <span class="field-text">운영 시간</span>
-                        </div>
-                        <div class="field field-value field-media-group field-tall">
-                            <span class="field-text">{{운영시간}}</span>
-                        </div>
-                    </div>
-
-                    <!-- Frame 13: 네 번째 행 (콘텐츠 정보) -->
-                    <div class="frame-media-info-row-3">
-                        <div class="field field-label field-media-group">
-                            <span class="field-text">콘텐츠 정보</span>
-                        </div>
-                        <div class="field field-value field-media-group">
-                            <span class="field-text">{{콘텐츠정보}}</span>
-                        </div>
-                    </div>
-
-                    <!-- Frame 1686563157: 다섯 번째 행 (광고 운영 방식) -->
-                    <div class="frame-media-info-row-3">
-                        <div class="field field-label field-media-group">
-                            <span class="field-text">광고 운영 방식</span>
-                        </div>
-                        <div class="field field-value field-media-group">
-                            <span class="field-text">{{광고운영방식}}</span>
-                        </div>
-                    </div>
-                </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 페이지 번호 -->
-            <div class="page-number"></div>
-        </div>
-    </section>
-
-    <!-- 페이지 14: 미디어그룹별 효과 분석 상세 - 노출 효과 분석, 광고 송출 분석 -->
-    <section class="page page-media-info page-media-group-detail">
-        <div class="container container-media-info">
-            <!-- Frame 8: 헤더 영역 -->
-            <div class="chapter-2-header">
-                <!-- Breadcrumb 그룹 -->
-                <div class="breadcrumb-bar">
-                    <!-- Breadcrumb 내부 -->
-                    <div class="breadcrumb-items">
-                        <span class="text-스케줄명-media">{{스케줄명}}</span>
-                        <span class="text-separator-media">|</span>
-                        <span class="text-목차-media">미디어그룹별 효과 분석</span>
-                        <span class="text-separator-media">></span>
-                        <span class="text-미디어그룹명-media">{{미디어그룹명}}</span>
-                    </div>
-                </div>
-                <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
-                <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
-            </div>
-
-            <!-- Frame 1686563155: 콘텐츠 영역 -->
-            <div class="media-detail-content">
-                <!-- 노출 효과 분석 -->
+                <!-- 노출 효과 분석 (Frame 21) -->
                 <div class="frame-exposure-analysis">
                     <!-- content title -->
                     <div class="frame-content-title">
                         <h2 class="text-media-group-overview-title">노출 효과 분석</h2>
-                        <!-- 수집 기간 정보 -->
+                        <!-- Frame 1686563135: 수집 기간 정보 -->
                         <div class="data-info-meta">
                             <span class="data-info-text">수집 기간: </span>
                             <div class="data-period-range">
@@ -999,6 +1284,7 @@
                                 </div>
                             </div>
                             <span class="data-info-text">| 산출 기준: </span>
+                            <!-- Frame 1686563114: 산출 기준 -->
                             <div class="data-info-wrapper">
                                 <div class="data-info-group">
                                     <span class="data-info-text">유동・노출인구 총합</span>
@@ -1007,9 +1293,9 @@
                         </div>
                     </div>
 
-                    <!-- 노출 효과 분석 테이블 -->
+                    <!-- Frame 13: 노출 효과 분석 테이블 -->
                     <div class="frame-exposure-analysis-table">
-                        <!-- Frame 18: 첫 번째 행 -->
+                        <!-- Frame 18: 첫 번째 행 (유동인구, 노출인구) -->
                         <div class="frame-media-info-row-1">
                             <div class="field field-label field-media-group">
                                 <span class="field-text">유동인구</span>
@@ -1025,23 +1311,17 @@
                             </div>
                         </div>
 
-                        <!-- Frame 20: 두 번째 행 -->
+                        <!-- Frame 20: 두 번째 행 (유동 대비 노출) -->
                         <div class="frame-media-info-row-2">
                             <div class="field field-label field-media-group">
-                                <span class="field-text">유동 대비 노출 비율</span>
+                                <span class="field-text">유동 대비 노출</span>
                             </div>
                             <div class="field field-value field-media-group field-bg-light">
-                                <span class="field-text">{{circulation대비ots비율}}%</span>
-                            </div>
-                            <div class="field field-label field-media-group">
-                                <span class="field-text">CPM<span class="field-text-small"> (노출인구 기준) </span></span>
-                            </div>
-                            <div class="field field-value field-media-group field-bg-light field-value-currency">
-                                <span class="field-text-small field-text-blue">(광고비 {{광고비}} 만원 기준)</span><span class="field-text">{{CPM}}원</span>
+                                <span class="field-text">{{유동 대비 노출}}%</span>
                             </div>
                         </div>
 
-                        <!-- Frame 21: 세 번째 행 -->
+                        <!-- Frame 21: 세 번째 행 (주요 오디언스, 주요 요일/시간대) -->
                         <div class="frame-media-info-row-3">
                             <div class="field field-label field-media-group">
                                 <span class="field-text">주요 오디언스</span>
@@ -1050,137 +1330,10 @@
                                 <span class="field-text">{{주요오디언스}} ({{주요오디언스비율}}%)</span>
                             </div>
                             <div class="field field-label field-media-group">
-                                <span class="field-text">주요 요일/시간대</span>
+                                <span class="field-text">주요 요일/ 주요 시간대</span>
                             </div>
                             <div class="field field-value field-media-group field-bg-light">
                                 <span class="field-text">{{주요요일}} / {{주요시간대}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 광고 송출 분석 -->
-                <div class="frame-ad-delivery-analysis">
-                    <!-- content title -->
-                    <div class="frame-content-title">
-                        <h2 class="text-media-group-overview-title">광고 송출 분석</h2>
-                        <!-- Frame 1686563134: 수집 기간 정보 -->
-                        <div class="data-period-wrapper">
-                            <span class="data-info-text">수집 기간: </span>
-                                <div class="data-period-range">
-                                    <div class="data-period-range-inner">
-                                        <div class="data-period-start">
-                                        <span class="data-info-text">{{광고시작일}}</span>
-                                    </div>
-                                    <span class="data-info-text">~</span>
-                                    <span class="data-info-text">{{광고종료일}}</span>
-                                </div>
-                            </div>
-                            <span class="data-info-text">| 데이터 출처: </span>
-                            <span class="data-info-text">재생 로그 및 미디어사 제공 데이터</span>
-                            <span class="data-info-text">| 산출 기준: </span>
-                            <div class="data-info-wrapper">
-                                <div class="data-info-group">
-                                    <span class="data-info-text">전체 일반・싱크 스케줄/ 일 평균 계산 기준</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 광고 송출 분석 테이블 -->
-                    <div class="frame-ad-delivery-analysis-table">
-                        <!-- Frame 18: 첫 번째 행 -->
-                        <div class="frame-media-info-row-1">
-                            <div class="field field-label field-media-group">
-                                <span class="field-text">총 송출 횟수</span>
-                            </div>
-                            <div class="field field-value field-media-group field-bg-light">
-                                <span class="field-text">일반 {{일반송출횟수}} 회/ 싱크 {{싱크송출횟수}} 회</span>
-                            </div>
-                        </div>
-
-                        <!-- Frame 20: 두 번째 행 -->
-                        <div class="frame-media-info-row-2">
-                            <div class="field field-label field-media-group field-tall">
-                                <span class="field-text field-text-14">일 평균 송출 횟수<br>/ 일 최소 송출 보장수</span>
-                            </div>
-                            <div class="field field-value field-media-group field-tall field-bg-light">
-                                <span class="field-text">{{일평균송출횟수}}회 / {{일최소송출보장수}}회</span>
-                            </div>
-                        </div>
-
-                        <!-- Frame 13: 세 번째 행 -->
-                        <div class="frame-media-info-row-3">
-                            <div class="field field-label field-media-group">
-                                <span class="field-text">송출 보장 달성률</span>
-                            </div>
-                            <div class="field field-value field-media-group field-bg-light">
-                                <span class="field-text">{{송출보장달성률}}%</span>
-                            </div>
-                        </div>
-
-                        <!-- Frame 21: 네 번째 행 -->
-                        <div class="frame-media-info-row-3">
-                            <div class="field field-label field-media-group">
-                                <span class="field-text">평균 송출 주기</span>
-                            </div>
-                            <div class="field field-value field-media-group field-bg-light">
-                                <span class="field-text">약 {{평균송출주기}}초</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 타임 광고 송출 분석 -->
-                <!-- 타임 광고 운영 여부에 따라 visible/invisible 처리 -->
-                <!-- 서버 측에서 {{타임광고운영여부}} 값에 따라 style="display: none;" 또는 class="invisible" 추가 -->
-                <!-- 예시: {{#if 타임광고운영여부}} 또는 {% if 타임광고운영여부 %} -->
-                <div class="frame-time-ad-delivery-analysis" data-time-ad-enabled="true">
-                    <!-- content title -->
-                    <div class="frame-content-title">
-                        <h2 class="text-media-group-overview-title">타임 광고 송출 분석</h2>
-                        <!-- Frame 1686563134: 수집 기간 정보 -->
-                        <div class="data-period-wrapper">
-                            <span class="data-info-text">수집 기간: </span>
-                            <div class="data-period-range">
-                                <div class="data-period-range-inner">
-                                    <div class="data-period-start">
-                                        <span class="data-info-text">{{광고시작일}}</span>
-                                    </div>
-                                    <span class="data-info-text">~</span>
-                                    <span class="data-info-text">{{광고종료일}}</span>
-                                </div>
-                            </div>
-                            <span class="data-info-text">| 데이터 출처: </span>
-                            <span class="data-info-text">재생 로그 및 미디어사 제공 데이터</span>
-                            <span class="data-info-text">| 산출 기준: </span>
-                            <div class="data-info-wrapper">
-                                <div class="data-info-group">
-                                    <span class="data-info-text">전체 타임 스케줄/ 총 노출 시간 기준</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 타임 광고 송출 분석 테이블 -->
-                    <div class="frame-time-ad-delivery-analysis-table">
-                        <!-- Frame 20: 첫 번째 행 -->
-                        <div class="frame-media-info-row-2">
-                            <div class="field field-label field-media-group field-tall">
-                                <span class="field-text field-text-14">총 노출 시간<br>/ 총 노출 보장 시간</span>
-                            </div>
-                            <div class="field field-value field-media-group field-tall field-bg-light">
-                                <span class="field-text">{{총노출시간}}시간 / {{총노출보장시간}}시간</span>
-                            </div>
-                        </div>
-
-                        <!-- Frame 13: 두 번째 행 -->
-                        <div class="frame-media-info-row-3">
-                            <div class="field field-label field-media-group">
-                                <span class="field-text">송출 보장 달성률</span>
-                            </div>
-                            <div class="field field-value field-media-group field-bg-light">
-                                <span class="field-text">{{타임송출보장달성률}}%</span>
                             </div>
                         </div>
                     </div>
@@ -1575,19 +1728,50 @@
             });
         }
         
-        // text-pitch-note의 위치를 필드(테이블) 아래 20px 간격으로 설정
+        // text-pitch-note의 위치를 테이블 하단 아래 20px 간격으로 설정
         function syncPitchNotePosition() {
             const pitchNotes = document.querySelectorAll('.text-pitch-note');
             pitchNotes.forEach((pitchNote) => {
+                // .frame-내용 내부의 pitch-note 처리
                 const frameContent = pitchNote.closest('.frame-내용');
                 if (frameContent) {
-                    const frameTable = frameContent.querySelector('.frame-table');
-                    if (frameTable) {
-                        const tableRect = frameTable.getBoundingClientRect();
+                    const tableContainer = frameContent.querySelector('.frame-table-container');
+                    if (tableContainer) {
+                        const containerRect = tableContainer.getBoundingClientRect();
                         const contentRect = frameContent.getBoundingClientRect();
-                        const tableBottom = tableRect.bottom - contentRect.top;
+                        const tableBottom = containerRect.bottom - contentRect.top;
                         // 테이블 하단 + 20px 간격
-                        pitchNote.style.top = (tableBottom + 20) + 'px';
+                        const topValue = (tableBottom + 20) + 'px';
+                        pitchNote.style.top = topValue;
+                        
+                        // text-continued-next-page도 같은 높이로 맞춤
+                        const continuedNote = frameContent.querySelector('.text-continued-next-page');
+                        if (continuedNote) {
+                            continuedNote.style.top = topValue;
+                        }
+                    }
+                }
+                
+                // 미디어그룹별 광고 성과 페이지의 pitch-note 처리
+                const pagePerformance3 = pitchNote.closest('.page-performance-3, .page-performance-7');
+                if (pagePerformance3 && !frameContent) {
+                    const tableContainer = pagePerformance3.querySelector('.frame-table-performance3-container');
+                    const container = pagePerformance3.querySelector('.container');
+                    
+                    if (tableContainer && container) {
+                        const containerRect = container.getBoundingClientRect();
+                        const tableRect = tableContainer.getBoundingClientRect();
+                        
+                        // 테이블 하단에서 컨테이너 상단까지의 거리
+                        const tableBottomRelative = tableRect.bottom - containerRect.top;
+                        
+                        // pitch-note를 테이블 하단 아래에 배치 (간격 20px)
+                        const topValue = (tableBottomRelative + 20) + 'px';
+                        pitchNote.style.top = topValue;
+                        pitchNote.style.position = 'absolute';
+                        pitchNote.style.display = 'block';
+                        pitchNote.style.visibility = 'visible';
+                        pitchNote.style.opacity = '1';
                     }
                 }
             });
@@ -1725,10 +1909,146 @@
         }
 
         // syncFieldTallHeight 실행 후 syncPitchNotePosition, syncInsightPosition 실행 (테이블 높이 계산 후 위치 설정)
+        function handleMediaInfoContinuation() {
+            const continuationSection = document.getElementById('page-media-info-continued');
+            if (!continuationSection) {
+                return;
+            }
+
+            const continuationItems = continuationSection.querySelectorAll('[data-media-info-continuation="true"]');
+            const hasContent = Array.from(continuationItems).some((item) => {
+                const text = item.textContent.replace(/\s+/g, ' ').trim();
+                return text && !text.includes('{{');
+            });
+
+            continuationSection.style.display = hasContent ? 'flex' : 'none';
+            const continuedNote = document.querySelector('.text-continued-next-page');
+            if (continuedNote) {
+                continuedNote.style.display = hasContent ? 'block' : 'none';
+            }
+        }
+
+        // 미디어그룹별 광고 성과 테이블의 "다음 페이지에 이어서" 문구 제어
+        function handlePerformanceTableContinuation() {
+            const continuationSection = document.querySelector('.page-performance-3-continued');
+            if (!continuationSection) {
+                return;
+            }
+
+            // 9-12번째 미디어그룹 행이 있는지 확인
+            const continuationRows = continuationSection.querySelectorAll('.table-data-row');
+            const hasContent = Array.from(continuationRows).some((row) => {
+                const firstCell = row.querySelector('td.field-value');
+                if (!firstCell) return false;
+                const text = firstCell.textContent.replace(/\s+/g, ' ').trim();
+                return text && !text.includes('{{');
+            });
+
+            // 이어지는 페이지 섹션 표시/숨김
+            continuationSection.style.display = hasContent ? 'block' : 'none';
+            
+            // "다음 페이지에 이어서" 문구 표시/숨김
+            const continuedNote = document.querySelector('.text-continued-performance-table');
+            if (continuedNote) {
+                continuedNote.style.display = hasContent ? 'block' : 'none';
+                // 위치 조정은 syncPerformanceTableNotePosition에서 처리
+                // 여기서는 표시/숨김만 처리
+            }
+        }
+
+        // 미디어그룹별 광고 성과 테이블 하단 주석 문구 위치 조정
+        // 항상 테이블 하단에 배치
+        function syncPerformanceTableNotePosition() {
+            const pagePerformance3 = document.querySelector('.page-performance-3, .page-performance-7');
+            if (!pagePerformance3) {
+                return;
+            }
+
+            const noteText = pagePerformance3.querySelector('.text-performance-table-note');
+            const continuedNote = pagePerformance3.querySelector('.text-continued-performance-table');
+            const tableContainer = pagePerformance3.querySelector('.frame-table-performance3-container');
+            const container = pagePerformance3.querySelector('.container');
+            
+            if (!noteText || !tableContainer || !container) {
+                return;
+            }
+
+            // performance-table-section을 기준으로 위치 계산
+            const performanceSection = noteText.closest('.performance-table-section');
+            if (!performanceSection) {
+                return;
+            }
+
+            const sectionRect = performanceSection.getBoundingClientRect();
+            const tableRect = tableContainer.getBoundingClientRect();
+            
+            // 테이블 하단에서 performance-section 상단까지의 거리
+            const tableBottomRelative = tableRect.bottom - sectionRect.top;
+            
+            // "다음 페이지에 이어서" 위치 계산 (테이블 하단 아래 20px 간격)
+            const continuedTop = tableBottomRelative + 20;
+            
+            // "다음 페이지에 이어서" 위치 설정
+            if (continuedNote) {
+                continuedNote.style.top = continuedTop + 'px';
+                continuedNote.style.position = 'absolute';
+                continuedNote.style.display = continuedNote.style.display || 'block';
+            }
+            
+            // "동일한 장소의 미디어그룹..." 주석을 "다음 페이지에 이어서"와 동일한 높이로 설정
+            noteText.style.top = continuedTop + 'px';
+            noteText.style.left = '0px'; // performance-table-section 기준
+            noteText.style.position = 'absolute';
+            noteText.style.display = 'block'; // 항상 표시
+            noteText.style.visibility = 'visible';
+            noteText.style.opacity = '1';
+            noteText.style.zIndex = '1000';
+        }
+
+
+        // page-media-info-continued 페이지의 table-row-last 높이 조정
+        // table-row-first의 높이 + table-row-last의 미디어 정보 필드 높이
+        function syncMediaInfoContinuedRowHeight() {
+            const continuedPage = document.querySelector('.page-media-info-continued');
+            if (!continuedPage) {
+                return;
+            }
+
+            const tableRowFirst = continuedPage.querySelector('.table-row-first');
+            const tableRowLast = continuedPage.querySelector('.table-row-last');
+            
+            // 미디어 정보 라벨 필드 찾기 (3번째 field-label.field-tall)
+            const labelFields = continuedPage.querySelectorAll('.table-row-last .field-label.field-tall');
+            const mediaInfoLabel = Array.from(labelFields).find(field => {
+                return field.querySelector('.field-label-media-info') !== null;
+            });
+            
+            if (!tableRowFirst || !tableRowLast || !mediaInfoLabel) {
+                return;
+            }
+
+            // 인라인 스타일의 height 제거 (자동 계산을 위해)
+            tableRowLast.style.height = '';
+            
+            // 첫 번째 행의 높이 측정
+            const firstRowHeight = tableRowFirst.getBoundingClientRect().height;
+            
+            // 미디어 정보 라벨 필드의 높이 측정
+            // 약간의 지연을 두어 레이아웃이 완료된 후 측정
+            setTimeout(() => {
+                const mediaInfoLabelHeight = mediaInfoLabel.getBoundingClientRect().height;
+                
+                // 두 높이의 합을 table-row-last의 높이로 설정
+                const totalHeight = firstRowHeight + mediaInfoLabelHeight;
+                tableRowLast.style.height = totalHeight + 'px';
+            }, 10);
+        }
+
         function syncAllHeights() {
             syncFieldTallHeight();
             // 약간의 지연 후 실행하여 테이블 높이 계산 완료 후 위치 설정
             setTimeout(() => {
+                syncMediaInfoContinuedRowHeight(); // page-media-info-continued 페이지 높이 조정
                 syncPitchNotePosition();
                 syncInsightPosition();
                 syncFrame21Position();
@@ -1736,6 +2056,9 @@
                 syncInsightNoticePosition();
                 syncInsightNoticePosition2(); // 주요 광고 성과 2 페이지
                 syncCpmFormulaPosition();
+                handleMediaInfoContinuation();
+                handlePerformanceTableContinuation();
+                syncPerformanceTableNotePosition();
             }, 0);
         }
         
