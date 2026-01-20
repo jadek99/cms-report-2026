@@ -1,4 +1,4 @@
-# CMS Report 프로젝트 변경 사항
+# cms-report-2026
 
 ## 개요
 이 문서는 CMS Report 프로젝트의 변경 사항을 기록합니다.
@@ -63,6 +63,17 @@
   - 템플릿 엔진에서 보고서 발행 연도를 자동으로 치환합니다
   - 다른 템플릿 변수(`{{보고서발행일}}`, `{{스케줄명}}` 등)와 동일한 방식으로 처리됩니다
 
+### 9. 미디어그룹 리스트 열 구성
+- **8개 단위 열 구성**: 미디어그룹 리스트가 8개 단위로 열 구성되도록 변경
+  - 1-8번: 첫 번째 열
+  - 9번부터: 두 번째 열
+- CSS Grid를 사용하여 `grid-template-rows: repeat(8, auto)` 및 `grid-auto-flow: column`으로 구현
+
+### 10. 필드 너비 및 테이블 스타일 조정
+- 미디어 대수 필드 텍스트 너비: 최대 120px
+- 테이블 셀 outline 제거
+- 필드 값 내부 그룹 가로 정렬
+
 ## 기술 스택
 - HTML5
 - CSS3
@@ -70,6 +81,6 @@
 - Pretendard 폰트
 
 ## 파일 구조
-- `adex-report.html`: 메인 HTML 파일
+- `cms-report.html`: 메인 HTML 파일
 - `styles.css`: 스타일시트 파일
 - `TEMPLATE_VARIABLES.md`: 템플릿 변수 문서
