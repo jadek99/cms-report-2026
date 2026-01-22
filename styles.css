@@ -3587,6 +3587,17 @@ canvas[id="chart-canvas"] {
     letter-spacing: -0.25px !important;
 }
 
+/* 페이지 13: chapter-2-header 내부 breadcrumb-items 텍스트는 15페이지와 동일하게 */
+.page-media-group-frame119 .chapter-2-header .breadcrumb-items .text-스케줄명-media,
+.page-media-group-frame119 .chapter-2-header .breadcrumb-items .text-목차-media,
+.page-media-group-frame119 .chapter-2-header .breadcrumb-items .text-미디어그룹명-media,
+.page-media-group-frame119 .chapter-2-header .breadcrumb-items .text-separator-media,
+.page-media-group-frame119 .chapter-2-header .text-platform-media {
+    font-size: 16px !important;
+    line-height: 19px !important;
+    letter-spacing: -0.25px !important;
+}
+
 .page-media-group-frame119 .text-platform-media {
     color: #58C65D;
 }
@@ -4329,6 +4340,21 @@ canvas[id="chart-canvas"] {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+/* Breadcrumb items */
+.breadcrumb-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+    width: fit-content; /* Hug: 콘텐츠에 맞춤 */
+    height: 19px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 /* Frame 1686563155: 콘텐츠 영역 */
