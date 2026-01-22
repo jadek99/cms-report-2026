@@ -1163,34 +1163,37 @@
     <!-- 페이지 13: 미디어그룹별 효과 분석 - Figma Frame 119 구조 -->
     <section class="page page-media-info page-media-group-detail page-media-group-frame119">
         <div class="container container-media-info">
-            <!-- head: 헤더 영역 (Frame 10) -->
-            <div class="frame-head">
-                <!-- top title: 상단 Breadcrumb (Frame 8) -->
-                <div class="frame-top-title">
-                    <!-- Breadcrumb 그룹 (Frame 1686563114) -->
-                    <div class="frame-top-title-group">
+            <!-- Frame 8: 헤더 영역 -->
+            <div class="chapter-2-header">
+                <!-- Breadcrumb 그룹 -->
+                <div class="breadcrumb-bar">
+                    <!-- Breadcrumb 내부 -->
+                    <div class="breadcrumb-items">
                         <span class="text-스케줄명-media">{{스케줄명}}</span>
                         <span class="text-separator-media">|</span>
                         <span class="text-목차-media">미디어그룹별 효과 분석</span>
-                        <span class="text-separator-media">|</span>
+                        <span class="text-separator-media">></span>
                         <span class="text-미디어그룹명-media">{{미디어그룹명}}</span>
                     </div>
-                    <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
-                    <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
                 </div>
-                <!-- sub title: 타이틀 영역 (Frame 9) -->
+                <!-- 디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service -->
+                <div class="text-platform-media">디지털 옥외광고 콘텐츠 미디어 통합 시스템 Dooh Service</div>
+            </div>
+            <!-- head: 헤더 영역 (Frame 10) -->
+            <div class="frame-head">
+                <!-- sub title: 타이틀 영역 -->
                 <div class="frame-sub-title frame-sub-title-media-group">
                     <h1 class="text-media-group-title">{{미디어그룹명}}</h1>
-                    <!-- Frame 1686563118: 부제목 그룹 -->
+                    <!-- 부제목 그룹 -->
                     <div class="frame-media-subtitle">
-                        <!-- Frame 1686563120: 첫 번째 그룹 -->
+                        <!-- 첫 번째 그룹 -->
                         <div class="frame-subtitle-line-1">
                             <span class="text-media-group-subtitle">{{광고물유형}}</span>
                             <span class="text-media-group-subtitle-separator">이며,</span>
                         </div>
-                        <!-- Frame 1686563119: 두 번째 그룹 -->
+                        <!-- 두 번째 그룹 -->
                         <div class="frame-subtitle-line-2">
-                            <!-- Frame 1686563121: 지역명 그룹 -->
+                            <!-- 지역명 그룹 -->
                             <div class="frame-subtitle-location">
                                 <span class="text-media-group-subtitle">{{장소적 특징}}</span>
                                 <span class="text-media-group-subtitle-region"> 지역</span>
@@ -1200,26 +1203,26 @@
                 </div>
             </div>
 
-            <!-- 콘텐츠 영역 (Frame 1686563194) -->
+            <!-- 콘텐츠 영역 -->
             <div class="media-detail-content">
-                <!-- 미디어그룹 광고 개요 (Frame 1686563189) -->
+                <!-- 미디어그룹 광고 개요 -->
                 <div class="frame-media-overview frame-media-overview-standalone">
-                    <!-- Frame 20: 제목 + 광고 기간 -->
+                    <!-- 제목 + 광고 기간 -->
                     <div class="frame-media-overview-header">
                         <h2 class="text-media-group-overview-title">미디어그룹 광고 개요</h2>
-                        <!-- Frame 1686563134: 광고 기간 정보 -->
+                        <!-- 광고 기간 정보 -->
                         <div class="data-period-wrapper">
                             <span class="data-info-text">광고 기간: </span>
                             <div class="data-period-range">
                                 <div class="data-period-range-inner">
-                                    <!-- Frame 1686563116: 시작일 -->
+                                    <!-- 시작일 -->
                                     <div class="data-period-start">
                                         <span class="data-info-text">{{광고시작일}}</span>
                                     </div>
                                     <span class="data-info-text">~</span>
                                     <span class="data-info-text">{{광고종료일}}</span>
                                 </div>
-                                <!-- Frame 1686563117: 총 일수 -->
+                                <!-- 총 일수 -->
                                 <div class="data-info-group">
                                     <span class="data-info-text">(총 {{운영일수}}</span>
                                     <span class="data-info-text">일)</span>
@@ -1228,9 +1231,9 @@
                         </div>
                     </div>
 
-                    <!-- Frame 13: 테이블 영역 -->
+                    <!-- 테이블 영역 -->
                     <div class="frame-media-info-table">
-                        <!-- Frame 18: 미디어 위치 행 -->
+                        <!-- 미디어 위치 행 -->
                         <div class="frame-media-info-row-1">
                             <div class="field field-label field-media-group">
                                 <span class="field-text">미디어 위치</span>
@@ -1240,13 +1243,13 @@
                             </div>
                         </div>
 
-                        <!-- Frame 1686563190: 미디어 대수 행 -->
+                        <!-- 미디어 대수 행 -->
                         <div class="frame-media-info-row-2">
                             <div class="field field-label field-media-group field-tall">
                                 <span class="field-text">미디어 대수</span>
                             </div>
                             <div class="field field-value field-media-group field-tall">
-                                <!-- Frame 1686563190: field 내부 그룹 -->
+                                <!-- field 내부 그룹 -->
                                 <div class="field-value-inner-group">
                                     <span class="field-text field-text-bold">총 {{미디어대수}}대</span>
                                     <span class="field-text">{{미디어유형/사이즈/간격/대수}}</span>
@@ -1254,7 +1257,7 @@
                             </div>
                         </div>
 
-                        <!-- Frame 1686563191: 운영 시간 행 -->
+                        <!-- 운영 시간 행 -->
                         <div class="frame-media-info-row-2">
                             <div class="field field-label field-media-group field-tall">
                                 <span class="field-text">운영 시간</span>
@@ -1266,12 +1269,12 @@
                     </div>
                 </div>
 
-                <!-- 노출 효과 분석 (Frame 21) -->
+                <!-- 노출 효과 분석 -->
                 <div class="frame-exposure-analysis">
                     <!-- content title -->
                     <div class="frame-content-title">
                         <h2 class="text-media-group-overview-title">노출 효과 분석</h2>
-                        <!-- Frame 1686563135: 수집 기간 정보 -->
+                        <!-- 수집 기간 정보 -->
                         <div class="data-info-meta">
                             <span class="data-info-text">수집 기간: </span>
                             <div class="data-period-range">
@@ -1284,7 +1287,7 @@
                                 </div>
                             </div>
                             <span class="data-info-text">| 산출 기준: </span>
-                            <!-- Frame 1686563114: 산출 기준 -->
+                            <!-- 산출 기준 -->
                             <div class="data-info-wrapper">
                                 <div class="data-info-group">
                                     <span class="data-info-text">유동・노출인구 총합</span>
@@ -1293,9 +1296,9 @@
                         </div>
                     </div>
 
-                    <!-- Frame 13: 노출 효과 분석 테이블 -->
+                    <!-- 노출 효과 분석 테이블 -->
                     <div class="frame-exposure-analysis-table">
-                        <!-- Frame 18: 첫 번째 행 (유동인구, 노출인구) -->
+                        <!-- 첫 번째 행 (유동인구, 노출인구) -->
                         <div class="frame-media-info-row-1">
                             <div class="field field-label field-media-group">
                                 <span class="field-text">유동인구</span>
@@ -1311,7 +1314,7 @@
                             </div>
                         </div>
 
-                        <!-- Frame 20: 두 번째 행 (유동 대비 노출) -->
+                        <!-- 두 번째 행 (유동 대비 노출) -->
                         <div class="frame-media-info-row-2">
                             <div class="field field-label field-media-group">
                                 <span class="field-text">유동 대비 노출</span>
@@ -1321,7 +1324,7 @@
                             </div>
                         </div>
 
-                        <!-- Frame 21: 세 번째 행 (주요 오디언스, 주요 요일/시간대) -->
+                        <!-- 세 번째 행 (주요 오디언스, 주요 요일/시간대) -->
                         <div class="frame-media-info-row-3">
                             <div class="field field-label field-media-group">
                                 <span class="field-text">주요 오디언스</span>
@@ -1453,9 +1456,6 @@
 
                     <!-- Frame 1686563126: 차트 컨테이너 -->
                     <div class="frame-visualization">
-                        <!-- 총합이 가장 많은 날의 값 표시 -->
-                        <div class="daily-chart-total" id="daily-chart-total-visualization"></div>
-                        
                         <canvas id="chart-canvas-mediagroup-ots-daily"></canvas>
 
                         <!-- Container: 범례 영역 -->
@@ -3869,7 +3869,6 @@
 
         // 일별 노출인구 차트 (페이지 15)
         const visualizationDailyCtx = document.getElementById('chart-canvas-mediagroup-ots-daily');
-        const visualizationDailyTotalEl = document.getElementById('daily-chart-total-visualization');
         const visualizationDailyLegendEl = document.querySelector('.frame-visualization-daily .visualization-legend-daily');
         
         if (visualizationDailyCtx) {
@@ -3894,11 +3893,6 @@
             const 최대값 = Math.max(...일별노출인구데이터.일별데이터);
             const 최대값인덱스 = 일별노출인구데이터.일별데이터.indexOf(최대값);
             const 최대날짜 = 일별노출인구데이터.날짜리스트[최대값인덱스];
-
-            // 총합이 가장 많은 날의 값 표시
-            if (visualizationDailyTotalEl) {
-                visualizationDailyTotalEl.textContent = `총 ${최대값.toLocaleString()}명`;
-            }
 
             // 범례 생성
             if (visualizationDailyLegendEl) {

@@ -1215,6 +1215,12 @@ ol.text-subsection-content.media-group-list {
 
 /* top title: 상단 Breadcrumb */
 .frame-top-title {
+    font-family: var(--font-family);
+    font-size: 11pt;
+    line-height: 140%;
+    print-color-adjust: exact;
+    margin: 0;
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -3571,6 +3577,16 @@ canvas[id="chart-canvas"] {
     letter-spacing: -0.048px;
 }
 
+/* 페이지 13: frame-top-title 내부 텍스트는 다른 페이지와 동일하게 */
+.page-media-group-frame119 .frame-top-title .text-스케줄명-media,
+.page-media-group-frame119 .frame-top-title .text-목차-media,
+.page-media-group-frame119 .frame-top-title .text-separator-media,
+.page-media-group-frame119 .frame-top-title .text-platform-media {
+    font-size: 16px !important;
+    line-height: 19px !important;
+    letter-spacing: -0.25px !important;
+}
+
 .page-media-group-frame119 .text-platform-media {
     color: #58C65D;
 }
@@ -4154,9 +4170,9 @@ canvas[id="chart-canvas"] {
 .field-label.field-media-group.field-tall {
     width: 180px;
     flex: 0 0 180px;
-    height: auto; /* 내용에 맞게 자동 조정 */
+    height: auto; /* hug: 내용에 맞게 자동 조정 */
     min-width: 0; /* 최소 너비 제거 */
-    min-height: 0; /* 최소 높이 제거 */
+    min-height: 52px; /* 최소 높이 52px */
     text-align: left; /* 좌측 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
     justify-content: flex-start; /* 좌측 정렬 */
